@@ -111,17 +111,17 @@ intl: ^0.19.0                # Định dạng ngày giờ
 ## Các khái niệm Flutter được sử dụng
 
 Khái niệm | Được dùng ở
-`ListView.builder` | list_view_screen.dart 
-`GridView.count` | grid_view_screen.dart 
-`GridView.extent` | grid_view_screen.dart 
-`SharedPreferences` | shared_prefs_service.dart 
-`Future / async / await` | async_screen.dart 
-`compute()` | isolate_service.dart 
-`Isolate.spawn()` | isolate_service.dart 
-`SendPort / ReceivePort` | isolate_service.dart 
-`Isolate.exit()` | isolate_service.dart 
-`StatefulWidget` | Tất cả màn hình có state 
-`Stream` | isolate_screen.dart (Tab 2)
+- `ListView.builder` | list_view_screen.dart 
+- `GridView.count` | grid_view_screen.dart 
+- `GridView.extent` | grid_view_screen.dart 
+- `SharedPreferences` | shared_prefs_service.dart 
+- `Future / async / await` | async_screen.dart 
+- `compute()` | isolate_service.dart 
+- `Isolate.spawn()` | isolate_service.dart 
+- `SendPort / ReceivePort` | isolate_service.dart 
+- `Isolate.exit()` | isolate_service.dart 
+- `StatefulWidget` | Tất cả màn hình có state 
+- `Stream` | isolate_screen.dart (Tab 2)
 
 ## Lưu ý
 
