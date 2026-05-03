@@ -1,10 +1,3 @@
-// ============================================================
-// FILE: lib/screens/isolate_screen.dart
-// CHỨC NĂNG: Màn hình demo Isolate
-//            - Task 1: Tính factorial 30000 dùng compute()
-//            - Task 2: Background isolate gửi số random, cộng dồn đến >100
-// ============================================================
-
 import 'dart:async';
 import 'dart:isolate';
 import 'package:flutter/material.dart';
@@ -52,9 +45,7 @@ class _IsolateScreenState extends State<IsolateScreen>
       body: TabBarView(
         controller: _tabController,
         children: const [
-          // Tab 1: Tính factorial
           _FactorialTab(),
-          // Tab 2: Random number isolate
           _RandomSumTab(),
         ],
       ),
@@ -62,9 +53,6 @@ class _IsolateScreenState extends State<IsolateScreen>
   }
 }
 
-// ============================================================
-// TAB 1: TÍNH FACTORIAL DÙNG compute()
-// ============================================================
 class _FactorialTab extends StatefulWidget {
   const _FactorialTab();
 
@@ -79,10 +67,8 @@ class _FactorialTabState extends State<_FactorialTab> {
   int _selectedN = 30000;
   Duration? _duration;
 
-  // Các lựa chọn giá trị n
   final List<int> _nOptions = [100, 1000, 5000, 10000, 30000];
 
-  /// Tính factorial trong isolate riêng
   Future<void> _calculate() async {
     setState(() {
       _isCalculating = true;
@@ -93,8 +79,6 @@ class _FactorialTabState extends State<_FactorialTab> {
     final stopwatch = Stopwatch()..start();
 
     try {
-      // Gọi compute() - chạy calculateFactorial trong isolate riêng
-      // UI Thread KHÔNG bị block trong lúc này
       final result = await IsolateService.computeFactorial(_selectedN);
 
       stopwatch.stop();
@@ -123,7 +107,6 @@ class _FactorialTabState extends State<_FactorialTab> {
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          // === Chọn giá trị n ===
           Card(
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -138,7 +121,6 @@ class _FactorialTabState extends State<_FactorialTab> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  // Nút chọn giá trị n
                   Wrap(
                     spacing: 8,
                     children: _nOptions.map((n) {
@@ -189,13 +171,10 @@ class _FactorialTabState extends State<_FactorialTab> {
           ),
           const SizedBox(height: 16),
 
-          // === Loading indicator ===
           if (_isCalculating) _buildLoadingCard(),
 
-          // === Hiển thị kết quả ===
           if (_result != null) _buildResultCard(),
 
-          // === Hiển thị lỗi ===
           if (_error != null)
             Card(
               color: const Color(0xFFFFEBEE),
@@ -208,7 +187,6 @@ class _FactorialTabState extends State<_FactorialTab> {
 
           const SizedBox(height: 16),
 
-          // === Giải thích compute() ===
           _buildComputeExplain(),
         ],
       ),
@@ -231,7 +209,7 @@ class _FactorialTabState extends State<_FactorialTab> {
             ),
             const SizedBox(height: 8),
             const Text(
-              '✅ UI vẫn responsive! Thử cuộn màn hình.',
+              'UI vẫn responsive! Thử cuộn màn hình.',
               style: TextStyle(fontSize: 12, color: Colors.grey),
             ),
           ],
@@ -338,9 +316,6 @@ class _FactorialTabState extends State<_FactorialTab> {
   }
 }
 
-// ============================================================
-// TAB 2: ISOLATE GIAO TIẾP - RANDOM SUM
-// ============================================================
 class _RandomSumTab extends StatefulWidget {
   const _RandomSumTab();
 
@@ -351,12 +326,12 @@ class _RandomSumTab extends StatefulWidget {
 class _RandomSumTabState extends State<_RandomSumTab>
     with AutomaticKeepAliveClientMixin {
   @override
-  bool get wantKeepAlive => true; // Giữ state khi chuyển tab
+  bool get wantKeepAlive => true;
   final IsolateManager _manager = IsolateManager();
 
   bool _isRunning = false;
-  int _sum = 0;          // Tổng tích lũy
-  final List<_NumberEvent> _events = []; // Lịch sử các số nhận được
+  int _sum = 0;
+  final List<_NumberEvent> _events = [];
   String _status = 'Nhấn Start để bắt đầu';
   bool _isDone = false;
   StreamSubscription? _subscription;
@@ -368,53 +343,46 @@ class _RandomSumTabState extends State<_RandomSumTab>
     super.dispose();
   }
 
-  /// Bắt đầu worker isolate
   Future<void> _startWorker() async {
     setState(() {
       _isRunning = true;
       _isDone = false;
       _sum = 0;
       _events.clear();
-      _status = '🚀 Worker isolate đã được spawn...';
+      _status = 'Worker isolate đã được spawn...';
     });
 
-    // Lấy stream từ worker isolate
     final stream = await _manager.startWorker();
 
-    // Lắng nghe messages từ worker isolate
     _subscription = stream.listen(
       (message) {
         if (!mounted) return;
 
         switch (message.type) {
           case 'setup':
-            // Nhận SendPort của worker để có thể gửi lệnh stop
             _manager.setWorkerSendPort(message.data as SendPort);
-            setState(() => _status = '📡 Connected! Worker đang gửi số mỗi giây...');
+            setState(() => _status = 'Connected! Worker đang gửi số mỗi giây...');
             break;
 
           case 'number':
-            // Nhận số random từ worker, cộng vào tổng
             final number = message.data as int;
             setState(() {
               _sum += number;
               _events.insert(0, _NumberEvent(number: number, sum: _sum));
-              _status = '📥 Nhận số: $number | Tổng: $_sum';
+              _status = 'Nhận số: $number | Tổng: $_sum';
 
-              // Kiểm tra điều kiện dừng: tổng > 100
               if (_sum > 100) {
-                _status = '🛑 Tổng ($_sum) > 100! Gửi lệnh STOP...';
+                _status = 'Tổng ($_sum) > 100! Gửi lệnh STOP...';
                 _manager.stopWorker();
               }
             });
             break;
 
           case 'done':
-            // Worker đã dừng và exit
             setState(() {
               _isRunning = false;
               _isDone = true;
-              _status = '✅ Worker isolate đã thoát gracefully (Isolate.exit())';
+              _status = 'Worker isolate đã thoát gracefully (Isolate.exit())';
             });
             _subscription?.cancel();
             _manager.dispose();
@@ -424,19 +392,17 @@ class _RandomSumTabState extends State<_RandomSumTab>
       onError: (e) {
         setState(() {
           _isRunning = false;
-          _status = '❌ Lỗi: $e';
+          _status = 'Lỗi: $e';
         });
       },
     );
   }
 
-  /// Dừng worker isolate thủ công
   void _stopWorker() {
     _manager.stopWorker();
-    setState(() => _status = '🛑 Đang gửi lệnh STOP đến worker...');
+    setState(() => _status = 'Đang gửi lệnh STOP đến worker...');
   }
 
-  /// Reset về trạng thái ban đầu
   void _reset() {
     _subscription?.cancel();
     _manager.dispose();
@@ -451,25 +417,21 @@ class _RandomSumTabState extends State<_RandomSumTab>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context); // Bắt buộc khi dùng AutomaticKeepAliveClientMixin
+    super.build(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          // === Tổng hiện tại + trạng thái ===
           _buildSumCard(),
           const SizedBox(height: 16),
 
-          // === Các nút điều khiển ===
           _buildControlButtons(),
           const SizedBox(height: 16),
 
-          // === Lịch sử số nhận được ===
           if (_events.isNotEmpty) _buildEventsCard(),
 
           const SizedBox(height: 16),
 
-          // === Giải thích cơ chế ===
           _buildIsolateExplain(),
         ],
       ),
@@ -483,7 +445,6 @@ class _RandomSumTabState extends State<_RandomSumTab>
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Tổng hiện tại
             Text(
               'Tổng tích lũy',
               style: TextStyle(color: Colors.grey[600], fontSize: 13),
@@ -502,7 +463,6 @@ class _RandomSumTabState extends State<_RandomSumTab>
               ),
             ),
             const SizedBox(height: 8),
-            // Progress bar đến 100
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: LinearProgressIndicator(
@@ -524,7 +484,6 @@ class _RandomSumTabState extends State<_RandomSumTab>
               style: const TextStyle(fontSize: 11, color: Colors.grey),
             ),
             const SizedBox(height: 12),
-            // Trạng thái
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
@@ -546,7 +505,6 @@ class _RandomSumTabState extends State<_RandomSumTab>
   Widget _buildControlButtons() {
     return Row(
       children: [
-        // Nút Start
         Expanded(
           child: ElevatedButton.icon(
             onPressed: _isRunning ? null : _startWorker,
@@ -559,7 +517,6 @@ class _RandomSumTabState extends State<_RandomSumTab>
           ),
         ),
         const SizedBox(width: 8),
-        // Nút Stop thủ công
         Expanded(
           child: ElevatedButton.icon(
             onPressed: (_isRunning && !_isDone) ? _stopWorker : null,
@@ -572,7 +529,6 @@ class _RandomSumTabState extends State<_RandomSumTab>
           ),
         ),
         const SizedBox(width: 8),
-        // Nút Reset
         Expanded(
           child: ElevatedButton.icon(
             onPressed: (!_isRunning || _isDone) ? _reset : null,
@@ -606,7 +562,6 @@ class _RandomSumTabState extends State<_RandomSumTab>
               ],
             ),
             const SizedBox(height: 8),
-            // Danh sách events (chỉ hiển thị 10 gần nhất)
             ...(_events.take(10).map((event) {
               return Container(
                 margin: const EdgeInsets.only(bottom: 4),
@@ -640,7 +595,7 @@ class _RandomSumTabState extends State<_RandomSumTab>
                     ),
                     const Spacer(),
                     if (event.sum > 100)
-                      const Text('🛑 STOP',
+                      const Text('STOP',
                           style: TextStyle(
                             color: Colors.red,
                             fontSize: 11,
@@ -687,12 +642,12 @@ class _RandomSumTabState extends State<_RandomSumTab>
             ),
             SizedBox(height: 12),
             Text(
-              '1️⃣  Main isolate spawn Worker isolate\n'
-              '2️⃣  Worker gửi SendPort về main (để main stop được)\n'
-              '3️⃣  Worker gửi số random mỗi giây qua SendPort\n'
-              '4️⃣  Main nhận số, cộng dồn vào tổng\n'
-              '5️⃣  Khi tổng > 100, main gửi lệnh "stop" về worker\n'
-              '6️⃣  Worker nhận lệnh stop, exit bằng Isolate.exit()',
+              '1.Main isolate spawn Worker isolate\n'
+              '2.Worker gửi SendPort về main (để main stop được)\n'
+              '3.Worker gửi số random mỗi giây qua SendPort\n'
+              '4.Main nhận số, cộng dồn vào tổng\n'
+              '5.Khi tổng > 100, main gửi lệnh "stop" về worker\n'
+              '6.Worker nhận lệnh stop, exit bằng Isolate.exit()',
               style: TextStyle(fontSize: 13, height: 1.7),
             ),
           ],
@@ -702,7 +657,6 @@ class _RandomSumTabState extends State<_RandomSumTab>
   }
 }
 
-/// Model lưu lịch sử mỗi lần nhận số
 class _NumberEvent {
   final int number;
   final int sum;

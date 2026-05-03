@@ -1,11 +1,3 @@
-// ============================================================
-// FILE: lib/screens/shared_prefs_screen.dart
-// CHỨC NĂNG: Màn hình thao tác với SharedPreferences
-//            - Lưu: name, age, email + timestamp
-//            - Hiển thị dữ liệu đã lưu
-//            - Xóa dữ liệu
-// ============================================================
-
 import 'package:flutter/material.dart';
 import '../services/shared_prefs_service.dart';
 
@@ -17,25 +9,20 @@ class SharedPrefsScreen extends StatefulWidget {
 }
 
 class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
-  // Controllers cho các TextField
   final _nameController = TextEditingController();
   final _ageController = TextEditingController();
   final _emailController = TextEditingController();
 
-  // Form key để validate
   final _formKey = GlobalKey<FormState>();
 
-  // Dữ liệu đã đọc từ SharedPreferences
   Map<String, String?> _savedData = {};
 
-  // Trạng thái loading - bắt đầu là true để tránh flash "no data"
   bool _isLoading = true;
   bool _isSaving = false;
 
   @override
   void initState() {
     super.initState();
-    // Tự động tải dữ liệu khi mở màn hình
     _loadData();
   }
 
@@ -47,10 +34,8 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
     super.dispose();
   }
 
-  /// Đọc dữ liệu từ SharedPreferences
   Future<void> _loadData() async {
     setState(() => _isLoading = true);
-    // Gọi service để lấy dữ liệu
     final data = await SharedPrefsService.getAllUserData();
     if (!mounted) return;
     setState(() {
@@ -59,9 +44,7 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
     });
   }
 
-  /// Lưu dữ liệu vào SharedPreferences
   Future<void> _saveData() async {
-    // Validate form trước khi lưu
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isSaving = true);
@@ -73,23 +56,20 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
     );
 
     if (success) {
-      // Tải lại dữ liệu sau khi lưu
       await _loadData();
       if (mounted) {
-        _showSnackBar('✅ Dữ liệu đã được lưu thành công!', Colors.green);
+        _showSnackBar('Dữ liệu đã được lưu thành công!', Colors.green);
       }
     } else {
       if (mounted) {
-        _showSnackBar('❌ Lưu thất bại, vui lòng thử lại', Colors.red);
+        _showSnackBar('Lưu thất bại, vui lòng thử lại', Colors.red);
       }
     }
 
     setState(() => _isSaving = false);
   }
 
-  /// Xóa tất cả dữ liệu
   Future<void> _clearData() async {
-    // Hiển thị dialog xác nhận
     final confirm = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -112,17 +92,15 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
     if (confirm == true) {
       await SharedPrefsService.clearAllData();
       await _loadData();
-      // Xóa nội dung TextField
       _nameController.clear();
       _ageController.clear();
       _emailController.clear();
       if (mounted) {
-        _showSnackBar('🗑️ Đã xóa tất cả dữ liệu', Colors.orange);
+        _showSnackBar('Đã xóa tất cả dữ liệu', Colors.orange);
       }
     }
   }
 
-  /// Hiển thị snackbar thông báo
   void _showSnackBar(String message, Color color) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -134,7 +112,6 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
     );
   }
 
-  /// Format timestamp từ ISO 8601 sang dạng dễ đọc
   String _formatTimestamp(String? iso) {
     if (iso == null) return 'Chưa có';
     try {
@@ -160,15 +137,8 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // ========================================
-            // PHẦN 1: Form nhập liệu
-            // ========================================
             _buildInputSection(),
             const SizedBox(height: 20),
-
-            // ========================================
-            // PHẦN 2: Hiển thị dữ liệu đã lưu
-            // ========================================
             _buildSavedDataSection(),
           ],
         ),
@@ -176,7 +146,6 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
     );
   }
 
-  /// Card chứa form nhập liệu
   Widget _buildInputSection() {
     return Card(
       child: Padding(
@@ -186,7 +155,6 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Tiêu đề section
               const Row(
                 children: [
                   Icon(Icons.edit_rounded, color: Color(0xFFFF9800), size: 22),
@@ -203,7 +171,6 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
               ),
               const SizedBox(height: 16),
 
-              // TextField: Tên (bắt buộc)
               TextFormField(
                 controller: _nameController,
                 decoration: _inputDecoration(
@@ -216,7 +183,6 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
               ),
               const SizedBox(height: 12),
 
-              // TextField: Tuổi (bonus)
               TextFormField(
                 controller: _ageController,
                 decoration: _inputDecoration(
@@ -236,7 +202,6 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
               ),
               const SizedBox(height: 12),
 
-              // TextField: Email (bonus)
               TextFormField(
                 controller: _emailController,
                 decoration: _inputDecoration(
@@ -255,10 +220,8 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
               ),
               const SizedBox(height: 20),
 
-              // Hàng các nút bấm
               Row(
                 children: [
-                  // Nút Save Name
                   Expanded(
                     flex: 2,
                     child: ElevatedButton.icon(
@@ -277,7 +240,6 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  // Nút Show Name
                   Expanded(
                     child: OutlinedButton.icon(
                       onPressed: _loadData,
@@ -298,7 +260,6 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
     );
   }
 
-  /// Card hiển thị dữ liệu đã lưu
   Widget _buildSavedDataSection() {
     final hasData = _savedData['name'] != null;
 
@@ -308,7 +269,6 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Tiêu đề + nút Clear
             Row(
               children: [
                 const Icon(Icons.storage_rounded,
@@ -323,7 +283,6 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
                   ),
                 ),
                 const Spacer(),
-                // Nút Clear (Bonus)
                 if (hasData)
                   TextButton.icon(
                     onPressed: _clearData,
@@ -338,7 +297,6 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
             ),
             const Divider(height: 20),
 
-            // Nội dung dữ liệu
             if (_isLoading)
               const Center(
                 child: Padding(
@@ -347,7 +305,6 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
                 ),
               )
             else if (!hasData)
-              // Trường hợp chưa có dữ liệu
               const Center(
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 20),
@@ -369,7 +326,6 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
                 ),
               )
             else
-              // Hiển thị dữ liệu đã lưu
               Column(
                 children: [
                   _dataRow(
@@ -390,7 +346,6 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
                     _savedData['email'] ?? 'Không có',
                     const Color(0xFF4CAF50),
                   ),
-                  // Timestamp (Bonus)
                   _dataRow(
                     Icons.access_time_rounded,
                     'Lần lưu cuối',
@@ -405,7 +360,6 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
     );
   }
 
-  /// Widget hiển thị một hàng dữ liệu
   Widget _dataRow(IconData icon, String label, String value, Color color) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -444,7 +398,6 @@ class _SharedPrefsScreenState extends State<SharedPrefsScreen> {
     );
   }
 
-  /// Helper tạo InputDecoration đồng nhất
   InputDecoration _inputDecoration(String label, IconData icon) {
     return InputDecoration(
       labelText: label,

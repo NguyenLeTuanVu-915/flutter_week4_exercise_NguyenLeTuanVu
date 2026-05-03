@@ -1,8 +1,3 @@
-// ============================================================
-// FILE: lib/screens/home_screen.dart
-// CHỨC NĂNG: Màn hình chính - menu điều hướng đến các bài tập
-// ============================================================
-
 import 'package:flutter/material.dart';
 import 'list_view_screen.dart';
 import 'grid_view_screen.dart';
@@ -15,7 +10,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Danh sách các bài tập để hiển thị menu
     final List<_MenuItem> menuItems = [
       _MenuItem(
         title: 'Exercise 1\nList View',
@@ -55,7 +49,6 @@ class HomeScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      // AppBar với tiêu đề
       appBar: AppBar(
         title: const Text('Week 4 Exercise'),
         bottom: PreferredSize(
@@ -68,7 +61,6 @@ class HomeScreen extends StatelessWidget {
       ),
 
       body: Container(
-        // Gradient nền
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -81,7 +73,6 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header card
               _buildHeaderCard(),
               const SizedBox(height: 20),
               const Text(
@@ -93,7 +84,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              // Danh sách menu items
               Expanded(
                 child: ListView.separated(
                   itemCount: menuItems.length,
@@ -110,7 +100,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  /// Widget header card hiển thị thông tin môn học
   Widget _buildHeaderCard() {
     return Card(
       color: const Color(0xFF6C63FF),
@@ -153,13 +142,11 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  /// Widget card cho từng menu item
   Widget _buildMenuCard(BuildContext context, _MenuItem item) {
     return Card(
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () {
-          // Điều hướng đến màn hình tương ứng
           Navigator.push(
             context,
             MaterialPageRoute(builder: (_) => item.screen),
@@ -169,7 +156,6 @@ class HomeScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Row(
             children: [
-              // Icon container
               Container(
                 width: 56,
                 height: 56,
@@ -180,7 +166,6 @@ class HomeScreen extends StatelessWidget {
                 child: Icon(item.icon, color: item.color, size: 28),
               ),
               const SizedBox(width: 16),
-              // Nội dung text
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,7 +189,6 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              // Mũi tên điều hướng
               Icon(
                 Icons.arrow_forward_ios_rounded,
                 color: item.color,
@@ -218,7 +202,6 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-/// Model dữ liệu cho menu item
 class _MenuItem {
   final String title;
   final String subtitle;

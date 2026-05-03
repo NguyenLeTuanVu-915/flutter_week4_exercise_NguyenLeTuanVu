@@ -1,16 +1,9 @@
-// ============================================================
-// FILE: lib/screens/grid_view_screen.dart
-// CHỨC NĂNG: Hiển thị 2 loại GridView (count và extent)
-// ============================================================
-
 import 'package:flutter/material.dart';
 import '../widgets/grid_item.dart';
 
 class GridViewScreen extends StatelessWidget {
   const GridViewScreen({super.key});
 
-  // === Dữ liệu cho 12 items ===
-  // Màu sắc cho từng item
   static const List<Color> _colors = [
     Color(0xFF6C63FF), Color(0xFFFF6B9D), Color(0xFF4CAF50),
     Color(0xFFFF9800), Color(0xFF2196F3), Color(0xFF9C27B0),
@@ -18,7 +11,6 @@ class GridViewScreen extends StatelessWidget {
     Color(0xFF3F51B5), Color(0xFF795548), Color(0xFF00BCD4),
   ];
 
-  // Icons cho từng item
   static const List<IconData> _icons = [
     Icons.star_rounded,       Icons.favorite_rounded,    Icons.bolt_rounded,
     Icons.local_fire_department_rounded, Icons.diamond_rounded, Icons.celebration_rounded,
@@ -38,9 +30,6 @@ class GridViewScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ========================================
-              // SECTION 1: GridView.count()
-              // ========================================
               _buildSectionTitle(
                 'Column Grid',
                 'GridView.count() - 3 cột cố định',
@@ -49,19 +38,15 @@ class GridViewScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
 
-              // GridView.count: số cột cố định = 3
               GridView.count(
-                // Không scroll GridView riêng lẻ, dùng SingleChildScrollView bên ngoài
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
 
-                // === THÔNG SỐ THEO YÊU CẦU ===
-                crossAxisCount: 3,        // 3 cột
-                crossAxisSpacing: 8,      // Spacing ngang = 8
-                mainAxisSpacing: 8,       // Spacing dọc = 8
-                childAspectRatio: 1.0,    // Tỷ lệ = 1 (hình vuông)
+                crossAxisCount: 3,
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8,
+                childAspectRatio: 1.0,
 
-                // Tạo 12 items
                 children: List.generate(12, (index) {
                   return GridItem(
                     index: index + 1,
@@ -73,9 +58,6 @@ class GridViewScreen extends StatelessWidget {
 
               const SizedBox(height: 32),
 
-              // ========================================
-              // SECTION 2: GridView.extent()
-              // ========================================
               _buildSectionTitle(
                 'Responsive Grid',
                 'GridView.extent() - độ rộng tối đa 150px',
@@ -84,30 +66,26 @@ class GridViewScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
 
-              // GridView.extent: kích thước tối đa mỗi ô = 150px
               GridView.extent(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
 
-                // === THÔNG SỐ THEO YÊU CẦU ===
-                maxCrossAxisExtent: 150,  // Độ rộng tối đa mỗi ô = 150px
-                crossAxisSpacing: 10,     // Spacing ngang = 10
-                mainAxisSpacing: 10,      // Spacing dọc = 10
-                childAspectRatio: 0.8,    // Tỷ lệ = 0.8 (cao hơn rộng)
+                maxCrossAxisExtent: 150,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 0.8,
 
-                // Tạo 12 items (hiển thị ngược màu để phân biệt 2 grid)
                 children: List.generate(12, (index) {
                   return GridItem(
                     index: index + 1,
-                    color: _colors[(index + 3) % 12], // Xáo trộn màu
-                    icon: _icons[(index + 6) % 12],   // Xáo trộn icon
+                    color: _colors[(index + 3) % 12],
+                    icon: _icons[(index + 6) % 12],
                   );
                 }),
               ),
 
               const SizedBox(height: 16),
 
-              // === Chú thích so sánh 2 loại GridView ===
               _buildComparisonCard(),
             ],
           ),
@@ -116,7 +94,6 @@ class GridViewScreen extends StatelessWidget {
     );
   }
 
-  /// Widget tiêu đề section
   Widget _buildSectionTitle(
     String title,
     String subtitle,
@@ -155,7 +132,6 @@ class GridViewScreen extends StatelessWidget {
     );
   }
 
-  /// Card so sánh 2 loại GridView
   Widget _buildComparisonCard() {
     return Card(
       color: const Color(0xFFF5F3FF),

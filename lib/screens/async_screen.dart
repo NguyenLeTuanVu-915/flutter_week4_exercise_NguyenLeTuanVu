@@ -1,22 +1,12 @@
-// ============================================================
-// FILE: lib/screens/async_screen.dart
-// CHỨC NĂNG: Demo Asynchronous Programming với Future & async/await
-//            - Hiển thị "Loading user..."
-//            - Chờ 3 giây
-//            - Hiển thị "User loaded successfully!"
-// ============================================================
-
 import 'package:flutter/material.dart';
 
-/// Trạng thái của quá trình async
 enum AsyncStatus {
-  idle,      // Chưa bắt đầu
-  loading,   // Đang tải
-  success,   // Thành công
-  error,     // Lỗi
+  idle,
+  loading,
+  success,
+  error,
 }
 
-/// Model dữ liệu user giả lập từ API
 class UserModel {
   final int id;
   final String name;
@@ -44,23 +34,18 @@ class AsyncScreen extends StatefulWidget {
 
 class _AsyncScreenState extends State<AsyncScreen>
     with SingleTickerProviderStateMixin {
-  // Trạng thái hiện tại
   AsyncStatus _status = AsyncStatus.idle;
 
-  // Dữ liệu user sau khi load
   UserModel? _user;
 
-  // Log các bước thực hiện
   final List<_LogEntry> _logs = [];
 
-  // Animation controller cho loading indicator
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
 
   @override
   void initState() {
     super.initState();
-    // Khởi tạo animation pulse (nhịp đập)
     _pulseController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
@@ -77,7 +62,6 @@ class _AsyncScreenState extends State<AsyncScreen>
     super.dispose();
   }
 
-  /// Thêm log entry mới
   void _addLog(String message, {Color color = const Color(0xFF333333)}) {
     setState(() {
       _logs.add(_LogEntry(
@@ -88,15 +72,9 @@ class _AsyncScreenState extends State<AsyncScreen>
     });
   }
 
-  /// ============================================================
-  /// HÀM GIẢ LẬP GỌI API - Trả về Future
-  /// Dùng async/await để đợi kết quả
-  /// ============================================================
   Future<UserModel> _fetchUser() async {
-    // Giả lập độ trễ mạng 3 giây
     await Future.delayed(const Duration(seconds: 3));
 
-    // Trả về user data giả lập (trong app thật sẽ dùng http package)
     return UserModel(
       id: 1001,
       name: 'Nguyễn Văn An',
@@ -107,37 +85,29 @@ class _AsyncScreenState extends State<AsyncScreen>
     );
   }
 
-  /// ============================================================
-  /// HÀM CHÍNH: Load user dùng async/await
-  /// ============================================================
   Future<void> _loadUser() async {
-    // Reset trạng thái
     setState(() {
       _status = AsyncStatus.loading;
       _user = null;
       _logs.clear();
     });
 
-    _addLog('🚀 Bắt đầu tải dữ liệu...', color: const Color(0xFF6C63FF));
-    _addLog('⏳ Đang kết nối server...', color: const Color(0xFF9C27B0));
+    _addLog('Bắt đầu tải dữ liệu...', color: const Color(0xFF6C63FF));
+    _addLog('Đang kết nối server...', color: const Color(0xFF9C27B0));
 
-    // Thêm log sau 1 giây
     Future.delayed(const Duration(seconds: 1), () {
       if (mounted && _status == AsyncStatus.loading) {
-        _addLog('📡 Đã kết nối, đang nhận dữ liệu...', color: const Color(0xFF2196F3));
+        _addLog('Đã kết nối, đang nhận dữ liệu...', color: const Color(0xFF2196F3));
       }
     });
 
-    // Thêm log sau 2 giây
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted && _status == AsyncStatus.loading) {
-        _addLog('🔄 Đang xử lý response...', color: const Color(0xFFFF9800));
+        _addLog('Đang xử lý response...', color: const Color(0xFFFF9800));
       }
     });
 
     try {
-      // === Dùng await để đợi Future hoàn thành ===
-      // Trong 3 giây này, UI vẫn responsive (không bị block)
       final user = await _fetchUser();
 
       if (mounted) {
@@ -145,14 +115,13 @@ class _AsyncScreenState extends State<AsyncScreen>
           _user = user;
           _status = AsyncStatus.success;
         });
-        _addLog('✅ User loaded successfully!', color: Colors.green);
-        _addLog('👤 User: ${user.name}', color: Colors.green);
+        _addLog('User loaded successfully!', color: Colors.green);
+        _addLog('User: ${user.name}', color: Colors.green);
       }
     } catch (e) {
-      // Xử lý lỗi
       if (mounted) {
         setState(() => _status = AsyncStatus.error);
-        _addLog('❌ Lỗi: $e', color: Colors.red);
+        _addLog('Lỗi: $e', color: Colors.red);
       }
     }
   }
@@ -167,29 +136,17 @@ class _AsyncScreenState extends State<AsyncScreen>
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // ========================================
-            // STATUS CARD: Hiển thị trạng thái chính
-            // ========================================
             _buildStatusCard(),
             const SizedBox(height: 16),
 
-            // ========================================
-            // USER CARD: Hiển thị thông tin user
-            // ========================================
             if (_user != null) ...[
               _buildUserCard(),
               const SizedBox(height: 16),
             ],
 
-            // ========================================
-            // LOG CARD: Hiển thị quá trình thực hiện
-            // ========================================
             if (_logs.isNotEmpty) _buildLogCard(),
             const SizedBox(height: 16),
 
-            // ========================================
-            // EXPLAIN CARD: Giải thích async/await
-            // ========================================
             _buildExplainCard(),
           ],
         ),
@@ -197,18 +154,15 @@ class _AsyncScreenState extends State<AsyncScreen>
     );
   }
 
-  /// Card trạng thái chính
   Widget _buildStatusCard() {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-            // Icon/animation theo trạng thái
             _buildStatusIcon(),
             const SizedBox(height: 16),
 
-            // Text trạng thái chính (theo yêu cầu bài tập)
             Text(
               _getStatusText(),
               style: TextStyle(
@@ -226,7 +180,6 @@ class _AsyncScreenState extends State<AsyncScreen>
             ),
             const SizedBox(height: 24),
 
-            // Nút Load User
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -246,7 +199,6 @@ class _AsyncScreenState extends State<AsyncScreen>
     );
   }
 
-  /// Icon hiển thị theo trạng thái
   Widget _buildStatusIcon() {
     switch (_status) {
       case AsyncStatus.idle:
@@ -256,7 +208,6 @@ class _AsyncScreenState extends State<AsyncScreen>
           color: Colors.grey,
         );
       case AsyncStatus.loading:
-        // Animation pulse khi đang loading
         return AnimatedBuilder(
           animation: _pulseAnimation,
           builder: (_, child) => Transform.scale(
@@ -294,9 +245,9 @@ class _AsyncScreenState extends State<AsyncScreen>
       case AsyncStatus.idle:
         return 'Nhấn nút để tải user';
       case AsyncStatus.loading:
-        return 'Loading user...'; // Theo yêu cầu bài tập
+        return 'Loading user...';
       case AsyncStatus.success:
-        return 'User loaded successfully!'; // Theo yêu cầu bài tập
+        return 'User loaded successfully!';
       case AsyncStatus.error:
         return 'Tải thất bại!';
     }
@@ -328,7 +279,6 @@ class _AsyncScreenState extends State<AsyncScreen>
     }
   }
 
-  /// Card hiển thị thông tin user đã tải
   Widget _buildUserCard() {
     final user = _user!;
     return Card(
@@ -386,7 +336,6 @@ class _AsyncScreenState extends State<AsyncScreen>
     );
   }
 
-  /// Card log quá trình
   Widget _buildLogCard() {
     return Card(
       child: Padding(
@@ -441,7 +390,6 @@ class _AsyncScreenState extends State<AsyncScreen>
     );
   }
 
-  /// Card giải thích async/await
   Widget _buildExplainCard() {
     return Card(
       color: const Color(0xFFF3E5F5),
@@ -507,7 +455,6 @@ class _AsyncScreenState extends State<AsyncScreen>
   }
 }
 
-/// Model cho một log entry
 class _LogEntry {
   final String message;
   final DateTime time;

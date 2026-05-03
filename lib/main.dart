@@ -1,8 +1,3 @@
-// ============================================================
-// FILE: lib/main.dart
-// CHỨC NĂNG: Điểm khởi đầu của ứng dụng Flutter
-// ============================================================
-
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
 
@@ -19,14 +14,12 @@ class MyApp extends StatelessWidget {
       title: 'Week 4 Exercise',
       debugShowCheckedModeBanner: false,
 
-      // Cấu hình theme toàn ứng dụng
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF6C63FF), // Màu tím chủ đạo
+          seedColor: const Color(0xFF6C63FF),
           brightness: Brightness.light,
         ),
         useMaterial3: true,
-        // Style cho AppBar
         appBarTheme: const AppBarTheme(
           centerTitle: true,
           elevation: 2,
@@ -38,7 +31,6 @@ class MyApp extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        // Style cho ElevatedButton
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF6C63FF),
@@ -49,7 +41,6 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        // Style cho Card
         cardTheme: CardThemeData(
           elevation: 3,
           shape: RoundedRectangleBorder(

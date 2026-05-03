@@ -1,8 +1,3 @@
-// ============================================================
-// FILE: lib/screens/list_view_screen.dart
-// CHỨC NĂNG: Hiển thị danh sách contacts dùng ListView.builder
-// ============================================================
-
 import 'package:flutter/material.dart';
 import '../widgets/contact_item.dart';
 
@@ -14,11 +9,10 @@ class ListViewScreen extends StatefulWidget {
 }
 
 class _ListViewScreenState extends State<ListViewScreen> {
-  // Controller để lắng nghe sự thay đổi của search field
+
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
-  // === DỮ LIỆU MẪU: Danh sách contacts ===
   final List<Contact> _allContacts = const [
     Contact(
       name: 'Nguyễn Văn An',
@@ -148,7 +142,6 @@ class _ListViewScreenState extends State<ListViewScreen> {
     super.dispose();
   }
 
-  /// Lọc danh sách contacts theo query tìm kiếm
   List<Contact> get _filteredContacts {
     if (_searchQuery.isEmpty) return _allContacts;
     return _allContacts.where((contact) {
@@ -168,7 +161,6 @@ class _ListViewScreenState extends State<ListViewScreen> {
       ),
       body: Column(
         children: [
-          // === Thanh tìm kiếm ===
           Container(
             color: const Color(0xFF6C63FF),
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -199,7 +191,6 @@ class _ListViewScreenState extends State<ListViewScreen> {
             ),
           ),
 
-          // === Header: số lượng contacts ===
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
             child: Row(
@@ -213,7 +204,6 @@ class _ListViewScreenState extends State<ListViewScreen> {
                   ),
                 ),
                 const Spacer(),
-                // Hiển thị số online
                 Row(
                   children: [
                     Container(
@@ -235,7 +225,6 @@ class _ListViewScreenState extends State<ListViewScreen> {
             ),
           ),
 
-          // === ListView.builder - Danh sách contacts có thể cuộn ===
           Expanded(
             child: filtered.isEmpty
                 ? const Center(
@@ -252,16 +241,13 @@ class _ListViewScreenState extends State<ListViewScreen> {
                     ),
                   )
                 : ListView.builder(
-                    // Số lượng item trong danh sách
                     itemCount: filtered.length,
-                    // Xây dựng từng item
                     itemBuilder: (context, index) {
                       return ContactItem(
                         contact: filtered[index],
                         onTap: () => _showContactDetail(context, filtered[index]),
                       );
                     },
-                    // Thêm padding cuối danh sách
                     padding: const EdgeInsets.only(bottom: 16),
                   ),
           ),
@@ -270,7 +256,6 @@ class _ListViewScreenState extends State<ListViewScreen> {
     );
   }
 
-  /// Hiển thị dialog chi tiết contact khi bấm vào
   void _showContactDetail(BuildContext context, Contact contact) {
     showModalBottomSheet(
       context: context,
@@ -282,7 +267,6 @@ class _ListViewScreenState extends State<ListViewScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Avatar lớn
             Container(
               width: 80,
               height: 80,

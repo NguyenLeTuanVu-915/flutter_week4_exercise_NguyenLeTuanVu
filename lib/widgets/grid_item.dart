@@ -1,15 +1,9 @@
-// ============================================================
-// FILE: lib/widgets/grid_item.dart
-// CHỨC NĂNG: Widget hiển thị một item trong GridView
-// ============================================================
-
 import 'package:flutter/material.dart';
 
-/// Widget hiển thị một ô trong GridView
 class GridItem extends StatelessWidget {
-  final int index;        // Số thứ tự item (bắt đầu từ 1)
-  final Color color;      // Màu nền container
-  final IconData icon;    // Icon hiển thị trong item
+  final int index;
+  final Color color;
+  final IconData icon;
 
   const GridItem({
     super.key,
@@ -21,7 +15,6 @@ class GridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // Container bo góc với màu nền
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         gradient: LinearGradient(
@@ -43,14 +36,12 @@ class GridItem extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Icon centered trong item
           Icon(
             icon,
             color: Colors.white,
             size: 32,
           ),
           const SizedBox(height: 8),
-          // Label text "Item X"
           Text(
             'Item $index',
             style: const TextStyle(
