@@ -24,6 +24,25 @@ flutter_week4_exercise/
 │       └── isolate_service.dart        # Service xử lý Isolate
 └── README.md
 ```
+## Screenshots
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/cf1e62f2-ba90-42ba-a730-8a907bedf0bd" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/b96353b8-e314-4e51-be60-d6d98ee0d2fd" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/2cbbeaad-b508-420c-8067-1fc512ca848e" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/faabe4a9-ed52-4f43-8fff-0f599e06fd7a" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/b4448c84-8f08-4d85-8c91-72e07a9c8e88" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/e66bd0b2-6325-4110-b728-4288a8f663ad" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0c4c64e7-f9d0-4979-b548-258ff35e0089" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/cc61d3f7-844f-471d-bc92-177065ae556d" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0a1b0e33-1a57-4177-a3d0-e36c50f19ec6" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/81c00397-a955-417d-8532-a4d14a61f9bc" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/21e7d41c-9c15-4291-8b41-8a1d7a44032e" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/2b9564f3-d7d2-48c5-a9f0-751d4cdd8931" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/84f584cb-3fae-4aef-bec7-9d1104cc2f32" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/2ebe377d-1ff3-4f29-9933-dd2c4d89f640" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/d0015994-ae15-40f8-9be2-ed4c508d1107" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/8a9fe3b6-98a0-49c4-b4d5-9152fc196c12" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/733e75f3-9777-442e-8787-95e9b6e2f4ce" />
 
 ## Cài đặt & Chạy Project
 
@@ -93,7 +112,7 @@ Task 1 - Factorial:
 4. Thấy loading indicator - thử cuộn màn hình → UI vẫn mượt (không bị freeze)
 5. Sau vài giây → hiển thị kết quả (số chữ số, chữ số đầu/cuối, thời gian)
 
-Task 2 - Random Sum: (Bị lỗi)
+Task 2 - Random Sum:
 1. Chọn tab "Task 2: Random Sum"
 2. Nhấn "Start" → spawn worker isolate
 3. Mỗi giây worker gửi 1 số random (1-30)
