@@ -146,8 +146,6 @@ class _AsyncScreenState extends State<AsyncScreen>
 
             if (_logs.isNotEmpty) _buildLogCard(),
             const SizedBox(height: 16),
-
-            _buildExplainCard(),
           ],
         ),
       ),
@@ -386,70 +384,6 @@ class _AsyncScreenState extends State<AsyncScreen>
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildExplainCard() {
-    return Card(
-      color: const Color(0xFFF3E5F5),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Row(
-              children: [
-                Icon(Icons.lightbulb_outline_rounded,
-                    color: Color(0xFF9C27B0)),
-                SizedBox(width: 8),
-                Text(
-                  'Giải thích code',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF9C27B0),
-                  ),
-                ),
-              ],
-            ),
-            const Divider(),
-            _codeExplain('Future<T>', 'Đại diện cho giá trị sẽ có trong tương lai'),
-            _codeExplain('async', 'Đánh dấu hàm là bất đồng bộ'),
-            _codeExplain('await', 'Chờ Future hoàn thành mà không block UI'),
-            _codeExplain('Future.delayed()', 'Tạo delay giả lập (3 giây trong bài này)'),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _codeExplain(String keyword, String explain) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(
-              color: const Color(0xFF9C27B0),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Text(
-              keyword,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 11,
-                fontFamily: 'monospace',
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(explain,
-                style: const TextStyle(fontSize: 12, color: Color(0xFF555555))),
-          ),
-        ],
       ),
     );
   }

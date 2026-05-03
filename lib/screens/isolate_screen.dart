@@ -187,7 +187,6 @@ class _FactorialTabState extends State<_FactorialTab> {
 
           const SizedBox(height: 16),
 
-          _buildComputeExplain(),
         ],
       ),
     );
@@ -275,42 +274,6 @@ class _FactorialTabState extends State<_FactorialTab> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildComputeExplain() {
-    return Card(
-      color: const Color(0xFFFFF3E0),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Row(
-              children: [
-                Icon(Icons.info_outline_rounded, color: Color(0xFFFF9800)),
-                SizedBox(width: 8),
-                Text(
-                  'Tại sao dùng compute()?',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFFF9800),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 12),
-            Text(
-              '• Tính 30000! là tác vụ cực nặng (CPU-bound)\n'
-              '• Nếu chạy trên main thread → UI bị freeze\n'
-              '• compute() tự động spawn Isolate riêng\n'
-              '• Main thread (UI) vẫn chạy bình thường\n'
-              '• Kết quả được trả về qua message passing',
-              style: TextStyle(fontSize: 13, height: 1.6),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -431,8 +394,6 @@ class _RandomSumTabState extends State<_RandomSumTab>
           if (_events.isNotEmpty) _buildEventsCard(),
 
           const SizedBox(height: 16),
-
-          _buildIsolateExplain(),
         ],
       ),
     );
@@ -613,43 +574,6 @@ class _RandomSumTabState extends State<_RandomSumTab>
                   style: const TextStyle(color: Colors.grey, fontSize: 12),
                 ),
               ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildIsolateExplain() {
-    return Card(
-      color: const Color(0xFFE8EAF6),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Row(
-              children: [
-                Icon(Icons.device_hub_rounded, color: Color(0xFF3F51B5)),
-                SizedBox(width: 8),
-                Text(
-                  'Cơ chế hoạt động',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF3F51B5),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 12),
-            Text(
-              '1.Main isolate spawn Worker isolate\n'
-              '2.Worker gửi SendPort về main (để main stop được)\n'
-              '3.Worker gửi số random mỗi giây qua SendPort\n'
-              '4.Main nhận số, cộng dồn vào tổng\n'
-              '5.Khi tổng > 100, main gửi lệnh "stop" về worker\n'
-              '6.Worker nhận lệnh stop, exit bằng Isolate.exit()',
-              style: TextStyle(fontSize: 13, height: 1.7),
-            ),
           ],
         ),
       ),
