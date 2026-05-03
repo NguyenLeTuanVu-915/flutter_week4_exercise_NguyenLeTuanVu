@@ -93,7 +93,7 @@ Task 1 - Factorial:
 4. Thấy loading indicator - thử cuộn màn hình → UI vẫn mượt (không bị freeze)
 5. Sau vài giây → hiển thị kết quả (số chữ số, chữ số đầu/cuối, thời gian)
 
-Task 2 - Random Sum:
+Task 2 - Random Sum: (Bị lỗi)
 1. Chọn tab "Task 2: Random Sum"
 2. Nhấn "Start" → spawn worker isolate
 3. Mỗi giây worker gửi 1 số random (1-30)
